@@ -15,30 +15,30 @@ namespace VityaziAutotest
         [OneTimeSetUp]
         public void SetUp()
         {
-            altUnityDriver = new AltUnityDriver();//инициализируем драйвер
+            altUnityDriver = new AltUnityDriver(); //initialization of driver
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            altUnityDriver.Stop();//останавливаем драйвер
+            altUnityDriver.Stop(); //stop driver
         }
 
-        [TearDown] // вызывается после каждого теста
+        [TearDown] // call after each test
         public void TearDown()
         {
-            // проверяем статус выполнения текущего теста (вызывается в [TearDown])
-            if (TestContext.CurrentContext.Result.Outcome == ResultState.Ignored) // если игнорируется тест и не выполняется (для этого, если нужно, в коде теста пишется "Assert.Ignore()"), то... 
-            {
-                // КОД ( если тест игнорировался)
+                // check the execution status of the current test (called in [TearDown])
+                if (TestContext.CurrentContext.Result.Outcome == ResultState.Ignored) // if the test is ignored and not executed(if "Assert.Ignore()") 
+                {      
+                    
+                }
+            if ((TestContext.CurrentContext.Result.Outcome == ResultState.Failure) || (TestContext.CurrentContext.Result.Outcome == ResultState.Error)) // test ended with an error
+                {
+                string error = TestContext.CurrentContext.Result.Message + "\n" + TestContext.CurrentContext.Result.StackTrace;// get message and stacktrace
+                    altUnityDriver.GetPNGScreenshot(screenShotPath + TestContext.CurrentContext.Test.Name + ".png");                                                                                                              
             }
-            if ((TestContext.CurrentContext.Result.Outcome == ResultState.Failure) || (TestContext.CurrentContext.Result.Outcome == ResultState.Error)) // тест завершён с ошибкой
-            {
-                string error = TestContext.CurrentContext.Result.Message + "\n" + TestContext.CurrentContext.Result.StackTrace; // получить сообщение и стектрейс
-                altUnityDriver.GetPNGScreenshot(screenShotPath + TestContext.CurrentContext.Test.Name + ".png");                                                                                                                // КОД (что делать, если тест завершён с ошибкой)
-            }
-            if (TestContext.CurrentContext.Result.Outcome == ResultState.Success) // тест завершён успешно
-            {
+            if (TestContext.CurrentContext.Result.Outcome == ResultState.Success) //test completed successfully
+                {
                 altUnityDriver.GetPNGScreenshot(screenShotPath + TestContext.CurrentContext.Test.Name + ".png");
             }
         }
